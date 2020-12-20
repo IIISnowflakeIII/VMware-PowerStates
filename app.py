@@ -76,6 +76,7 @@ def write_to_influx():
         try:
           influx_client.switch_database(influx_db)
           influx_client.write_points([measurement])
+          print("Exported to InfluxDB successfully")
         except InfluxDBClientError as e:
           logging.error("Failed to export data to Influxdb: %s" % e)
 
