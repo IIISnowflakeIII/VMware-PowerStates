@@ -61,10 +61,6 @@ def poweredOff():
   x = sum(list)
   return x
 
-#Print powerStates
-print(str(poweredOn()) + " powered on")
-print(str(poweredOff()) + " powered off")
-
 #Writes data to InfluxDB
 def write_to_influx():
         measurement = {}
@@ -77,11 +73,17 @@ def write_to_influx():
           influx_client.switch_database(influx_db)
           influx_client.write_points([measurement])
           print("Exported to InfluxDB successfully")
+          print("")
         except InfluxDBClientError as e:
           logging.error("Failed to export data to Influxdb: %s" % e)
 
+def main():
+  print(str(poweredOn()) + " powered on")
+  print(str(poweredOff()) + " powered off")
+  write_to_influx()
+
 if __name__ == "__main__":
-  schedule.every(1).minutes.do(write_to_influx)
+  schedule.every(1).minutes.do(main)
   while 1:
     schedule.run_pending()
     time.sleep(1)
