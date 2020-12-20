@@ -3,12 +3,7 @@ from influxdb import InfluxDBClient
 from influxdb.exceptions import InfluxDBClientError
 from pyVim import connect
 from pyVmomi import vim
-<<<<<<< HEAD
 from os import environ, write
-<<<<<<< HEAD
-=======
-from os import environ
->>>>>>> parent of cdf4671 (Revert "Added error handeling to InfluxDB")
 import logging
 import schedule
 import time
@@ -92,4 +87,7 @@ def write_to_influx():
           logging.error("Failed to export data to Influxdb: %s" % e)
 
 if __name__ == "__main__":
-  write_to_influx()
+  schedule.every(1).minutes.do(write_to_influx())
+  while 1:
+    schedule.run_pending()
+    time.sleep(1)
