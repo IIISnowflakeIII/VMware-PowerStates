@@ -9,20 +9,13 @@ import schedule
 import time
 
 #Get host variables
-# vcenter_host = environ['VCENTER_HOST']
-# vcenter_usr = environ['VCENTER_USR']
-# vcenter_pwd = environ['VCENTER_PWD']
-vcenter_host = "vcsa.ad.snowlab.xyz"
-vcenter_usr = "administrator@vsphere.local"
-vcenter_pwd = "S!mpl1f1c@T!)N"
-# influx_host = environ['INFLUX_HOST']
-# influx_usr = environ['INFLUX_USR']
-# influx_pwd = environ['INFLUX_PWD']
-# influx_db = environ['INFLUX_DB']
-influx_host = "10.0.20.70"
-influx_usr = "telegraf"
-influx_pwd = "telegraf"
-influx_db = "test1"
+vcenter_host = environ['VCENTER_HOST']
+vcenter_usr = environ['VCENTER_USR']
+vcenter_pwd = environ['VCENTER_PWD']
+influx_host = environ['INFLUX_HOST']
+influx_usr = environ['INFLUX_USR']
+influx_pwd = environ['INFLUX_PWD']
+influx_db = environ['INFLUX_DB']
 
 #Influx client 
 influx_client = InfluxDBClient(
