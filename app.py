@@ -2,7 +2,7 @@
 from influxdb import InfluxDBClient
 from pyVim import connect
 from pyVmomi import vim
-from os import environ
+from os import environ, write
 <<<<<<< HEAD
 import logging
 import schedule
@@ -86,7 +86,4 @@ def write_to_influx():
         influx_client.write_points([measurement])
 
 if __name__ == "__main__":
-  schedule.every(1).minutes.do(write_to_influx())
-  while 1:
-    schedule.run_pending()
-    time.sleep(1)
+  write_to_influx()
