@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 from influxdb import InfluxDBClient
+from influxdb.exceptions import InfluxDBClientError
 from pyVim import connect
 from pyVmomi import vim
 from os import environ
+import logging
 
 #Get host variables
 # vcenter_host = environ['VCENTER_HOST']
@@ -16,9 +18,9 @@ vcenter_pwd = "S!mpl1f1c@T!)N"
 # influx_pwd = environ['INFLUX_PWD']
 # influx_db = environ['INFLUX_DB']
 influx_host = "10.0.20.70"
-influx_usr = "xx"
-influx_pwd = "xxea"
-influx_db = "test"
+influx_usr = "telegraf"
+influx_pwd = "telegraf"
+influx_db = "test1"
 
 #Influx client 
 influx_client = InfluxDBClient(
@@ -76,8 +78,11 @@ def write_to_influx():
         measurement['fields'] = {}
         measurement['fields']['poweredOn'] = poweredOn()
         measurement['fields']['poweredOff'] = poweredOff()
-        influx_client.switch_database(influx_db)
-        influx_client.write_points([measurement])
+        try:
+          influx_client.switch_database(influx_db)
+          influx_client.write_points([measurement])
+        except InfluxDBClientError as e:
+          logging.error("Failed to export data to Influxdb: %s" % e)
 
 if __name__ == "__main__":
   write_to_influx()
