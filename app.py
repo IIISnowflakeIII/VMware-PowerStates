@@ -4,14 +4,23 @@ from pyVim import connect
 from pyVmomi import vim
 from os import environ
 
-vcenter_host = environ['VCENTER_HOST']
-vcenter_usr = environ['VCENTER_USR']
-vcenter_pwd = environ['VCENTER_PWD']
-influx_host = environ['INFLUX_HOST']
-influx_usr = environ['INFLUX_USR']
-influx_pwd = environ['INFLUX_PWD']
-influx_db = environ['INFLUX_DB']
+#Get host variables
+# vcenter_host = environ['VCENTER_HOST']
+# vcenter_usr = environ['VCENTER_USR']
+# vcenter_pwd = environ['VCENTER_PWD']
+vcenter_host = "vcsa.ad.snowlab.xyz"
+vcenter_usr = "administrator@vsphere.local"
+vcenter_pwd = "S!mpl1f1c@T!)N"
+# influx_host = environ['INFLUX_HOST']
+# influx_usr = environ['INFLUX_USR']
+# influx_pwd = environ['INFLUX_PWD']
+# influx_db = environ['INFLUX_DB']
+influx_host = "10.0.20.70"
+influx_usr = "xx"
+influx_pwd = "xxea"
+influx_db = "test"
 
+#Influx client 
 influx_client = InfluxDBClient(
   host=influx_host, 
   port=8086, 
@@ -19,6 +28,7 @@ influx_client = InfluxDBClient(
   password=influx_pwd
 )
 
+#VSphere client
 vsphere_client = connect.SmartConnectNoSSL (
   host=vcenter_host,
   user=vcenter_usr,
@@ -34,6 +44,7 @@ containerView = content.viewManager.CreateContainerView(
 
 children = containerView.view
 
+#Get number of VM's powered on
 def poweredOn():
   list = []
   for child in children:
@@ -43,6 +54,7 @@ def poweredOn():
   x = sum(list)
   return x
 
+#Get number of VM's powered off
 def poweredOff():
   list = []
   for child in children:
@@ -52,9 +64,11 @@ def poweredOff():
   x = sum(list)
   return x
 
-print(poweredOn())
-print(poweredOff())
+#Print powerStates
+print(str(poweredOn()) + " powered on")
+print(str(poweredOff()) + " powered off")
 
+#Writes data to InfluxDB
 def write_to_influx():
         measurement = {}
         measurement['measurement'] = 'vsphere_cluster_vmcount'
@@ -64,8 +78,6 @@ def write_to_influx():
         measurement['fields']['poweredOff'] = poweredOff()
         influx_client.switch_database(influx_db)
         influx_client.write_points([measurement])
-        print("Written data to DB")
 
 if __name__ == "__main__":
-    write_to_influx()
-
+  write_to_influx()
