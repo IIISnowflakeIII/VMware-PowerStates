@@ -80,7 +80,7 @@ def write_to_influx():
           logging.error("Failed to export data to Influxdb: %s" % e)
 
 if __name__ == "__main__":
-  schedule.every(1).minutes.do(write_to_influx())
+  schedule.every(1).minutes.do(write_to_influx)
   while 1:
     schedule.run_pending()
     time.sleep(1)
