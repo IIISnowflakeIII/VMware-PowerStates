@@ -5,6 +5,8 @@ from pyVim import connect
 from pyVmomi import vim
 from os import environ
 import logging
+import schedule
+import time
 
 #Get host variables
 # vcenter_host = environ['VCENTER_HOST']
@@ -85,4 +87,7 @@ def write_to_influx():
           logging.error("Failed to export data to Influxdb: %s" % e)
 
 if __name__ == "__main__":
-  write_to_influx()
+  schedule.every(1).minutes.do(write_to_influx())
+  while 1:
+    schedule.run_pending()
+    time.sleep(1)
