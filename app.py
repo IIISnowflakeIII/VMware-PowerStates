@@ -83,6 +83,8 @@ def main():
   write_to_influx()
 
 if __name__ == "__main__":
+  print("Starting vSphere powerstate monitor...")
+  main()
   schedule.every(1).minutes.do(main)
   while 1:
     schedule.run_pending()
