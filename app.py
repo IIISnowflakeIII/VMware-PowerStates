@@ -55,7 +55,6 @@ def main():
   vcenter_host = environ['VCENTER_HOST']
   vcenter_usr = environ['VCENTER_USR']
   vcenter_pwd = environ['VCENTER_PWD']
-  
   influx_host = environ['INFLUX_HOST']
   influx_usr = environ['INFLUX_USR']
   influx_pwd = environ['INFLUX_PWD']
